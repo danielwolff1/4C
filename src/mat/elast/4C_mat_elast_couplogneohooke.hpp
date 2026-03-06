@@ -197,6 +197,14 @@ namespace Mat
         return;
       };
 
+      //! return names of visualization data available for direct VTK output
+      void register_output_data_names(
+          std::unordered_map<std::string, int>& names_and_size) const override;
+
+      //! return visualization data for direct VTK output
+      bool evaluate_output_data(
+          const std::string& name, Core::LinAlg::SerialDenseMatrix& data) const override;
+
      private:
       /// my material parameters
       Mat::Elastic::PAR::CoupLogNeoHooke* params_;

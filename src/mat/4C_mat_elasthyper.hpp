@@ -343,6 +343,14 @@ namespace Mat
     bool vis_data(
         const std::string& name, std::vector<double>& data, int numgp, int eleID) const override;
 
+    //! return names of visualization data available for direct VTK output
+      void register_output_data_names(
+          std::unordered_map<std::string, int>& names_and_size) const override;
+
+      //! return visualization data for direct VTK output
+      bool evaluate_output_data(
+          const std::string& name, Core::LinAlg::SerialDenseMatrix& data) const override;
+
    protected:
     /// @name Flags to specify the elastic formulations (initialize with false)
     //@{
@@ -358,6 +366,10 @@ namespace Mat
 
     /// Holder of anisotropy
     Mat::Anisotropy anisotropy_;
+
+    /// store the cauchy stresses at the gauss points for output purposes
+    std::vector<Core::LinAlg::SymmetricTensor<double, 3, 3>> cauchy_stress_gp_data_;
+
   };
 
 }  // namespace Mat

@@ -258,6 +258,16 @@ void Mat::ElastHyper::setup(int numgp, const Discret::Elements::Fibers& fibers,
         "Never use viscoelastic-materials in Elasthyper-Toolbox. Use Viscoelasthyper-Toolbox "
         "instead.");
   }
+
+  // std::cout << "in Mat::ElastHyper::setup, initializing cauchy_stress_gp_data_ (numgp=" << numgp << ")" << std::endl;
+  // initialize cauchy stress data at gauss points for output purposes
+  cauchy_stress_gp_data_ = std::vector<Core::LinAlg::SymmetricTensor<double, 3, 3>>(numgp);
+  for (auto& entry : cauchy_stress_gp_data_)
+  {
+    entry.fill(0.0);
+  }
+  // std::cout << "in Mat::ElastHyper::setup, filled cauchy_stress_gp_data_ with zero matrices)" << std::endl;
+
 }
 
 void Mat::ElastHyper::post_setup(const Teuchos::ParameterList& params, const int eleGID)
@@ -350,6 +360,18 @@ void Mat::ElastHyper::evaluate(const Core::LinAlg::Tensor<double, 3, 3>* defgrad
 
   elast_hyper_evaluate(*defgrad, glstrain, params, stress, cmat, gp, eleGID, potsum_,
       summandProperties_, checkpolyconvexity);
+
+  // compute cauchy stress at gauss point for output purposes
+  // Core::LinAlg::SymmetricTensor<double, 3, 3> cauchystress{};
+  // for now simply store the second Piola-Kirchhoff stress as a proxy
+  // std::cout << "in Mat::ElastHyper::evaluate, storing second Piola-Kirchhoff stress as proxy for cauchy stress at gauss point " << gp << std::endl;
+  const double determinant = Core::LinAlg::det(*defgrad);
+  // const fs = Core::LinAlg::dot(*defgrad, stress);
+  const Core::LinAlg::SymmetricTensor<double, 3, 3> fsft = Core::LinAlg::assume_symmetry((*defgrad) * stress * Core::LinAlg::transpose(*defgrad));
+  const Core::LinAlg::SymmetricTensor<double, 3, 3> result_tensor = Core::LinAlg::scale(fsft, 1.0 / determinant);
+  cauchy_stress_gp_data_.at(gp) = result_tensor;
+  // std::cout << "done" << std::endl;
+  
 }
 
 /*----------------------------------------------------------------------*/
@@ -880,5 +902,47 @@ std::shared_ptr<const Mat::Elastic::Summand> Mat::ElastHyper::get_pot_summand_pt
   }
   return nullptr;
 }
+
+/*---------------------------------------------------------------------*
+ | return names of visualization data for direct VTK output            |
+ *---------------------------------------------------------------------*/
+void Mat::ElastHyper::register_output_data_names(
+    std::unordered_map<std::string, int>& names_and_size) const
+{
+  // std::cout << "In Mat::ElastHyper::register_output_data_names" << std::endl;
+  names_and_size["cauchy"] = 6;  // symmetric 2nd order tensor
+  for (const auto& p : potsum_)
+  {
+    p->register_output_data_names(names_and_size);
+  }
+}
+
+
+bool Mat::ElastHyper::evaluate_output_data(
+    const std::string& name, Core::LinAlg::SerialDenseMatrix& data) const
+{
+  // std::cout << "In Mat::ElastHyper::evaluate_output_data (cauchy_stress_gp_data_.size()=" << cauchy_stress_gp_data_.size() << ")" << std::endl;
+  if (name == "cauchy")
+  {
+    for (std::size_t gp = 0; gp < cauchy_stress_gp_data_.size(); ++gp)
+    {
+      const auto& data_gp = Core::LinAlg::make_stress_like_voigt_view(cauchy_stress_gp_data_[gp]);
+      for(std::size_t i = 0; i < data_gp.num_rows(); ++i)
+      {
+        data(gp, i) = data_gp(i, 0);
+      }
+    }
+    return true;
+  }
+
+  bool temp = false;
+  for (const auto& p : potsum_)
+  {
+    bool ret = p->evaluate_output_data(name, data);
+    temp |= ret;
+  }
+  return temp;
+}
+
 
 FOUR_C_NAMESPACE_CLOSE

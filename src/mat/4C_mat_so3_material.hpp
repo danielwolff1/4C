@@ -176,6 +176,11 @@ namespace Mat
     virtual void setup(int numgp, const Discret::Elements::Fibers& fibers,
         const std::optional<Discret::Elements::CoordinateSystem>& coord_system)
     {
+        cauchy_stress_gp_data_ = std::vector<Core::LinAlg::SymmetricTensor<double, 3, 3>>(numgp);
+        for (auto& entry : cauchy_stress_gp_data_)
+        {
+          entry.fill(0.0);
+        }
     }
 
     /*!
@@ -300,6 +305,11 @@ namespace Mat
     {
       return false;
     }
+
+  private:
+
+    std::vector<Core::LinAlg::SymmetricTensor<double, 3, 3>> cauchy_stress_gp_data_;
+
     //@}
   };
 
