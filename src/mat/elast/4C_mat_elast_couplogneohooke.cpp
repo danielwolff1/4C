@@ -95,7 +95,7 @@ void Mat::Elastic::CoupLogNeoHooke::register_output_data_names(
     std::unordered_map<std::string, int>& names_and_size) const
 {
   // std::cout << "In Mat::Elastic::CoupLogNeoHooke::register_output_data_names" << std::endl;
-  names_and_size["lambda"] = 1;
+  // names_and_size["lambda"] = 1;
 }
 
 
@@ -103,14 +103,14 @@ bool Mat::Elastic::CoupLogNeoHooke::evaluate_output_data(
     const std::string& name, Core::LinAlg::SerialDenseMatrix& data) const
 {
   // std::cout << "In Mat::Elastic::CoupLogNeoHooke::evaluate_output_data" << std::endl;
-  if (name == "lambda")
-  {
-    for (std::size_t gp = 0; gp < 8; ++gp)
-    {
-      data(gp, 0) = params_->lambda_*gp;
-    }
-    return true;
-  }
+  // if (name == "lambda")
+  // {
+  //   for (std::size_t gp = 0; gp < 8; ++gp)
+  //   {
+  //     data(gp, 0) = params_->lambda_*gp;
+  //   }
+  //   return true;
+  // }
   return false;
 }
 

@@ -910,7 +910,7 @@ void Mat::ElastHyper::register_output_data_names(
     std::unordered_map<std::string, int>& names_and_size) const
 {
   // std::cout << "In Mat::ElastHyper::register_output_data_names" << std::endl;
-  names_and_size["cauchy"] = 6;  // symmetric 2nd order tensor
+  names_and_size["cauchy_stress_gp"] = 6;  // symmetric 2nd order tensor
   for (const auto& p : potsum_)
   {
     p->register_output_data_names(names_and_size);
@@ -922,7 +922,7 @@ bool Mat::ElastHyper::evaluate_output_data(
     const std::string& name, Core::LinAlg::SerialDenseMatrix& data) const
 {
   // std::cout << "In Mat::ElastHyper::evaluate_output_data (cauchy_stress_gp_data_.size()=" << cauchy_stress_gp_data_.size() << ")" << std::endl;
-  if (name == "cauchy")
+  if (name == "cauchy_stress_gp")
   {
     for (std::size_t gp = 0; gp < cauchy_stress_gp_data_.size(); ++gp)
     {
