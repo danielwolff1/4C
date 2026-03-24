@@ -461,7 +461,7 @@ void Solid::IMPLICIT::GenAlpha::predict_const_dis_consist_vel_acc(
 
 /*----------------------------------------------------------------------------*
  *----------------------------------------------------------------------------*/
-bool Solid::IMPLICIT::GenAlpha::predict_const_vel_consist_acc(Core::LinAlg::Vector<double>& disnp,
+void Solid::IMPLICIT::GenAlpha::predict_const_vel_consist_acc(Core::LinAlg::Vector<double>& disnp,
     Core::LinAlg::Vector<double>& velnp, Core::LinAlg::Vector<double>& accnp) const
 {
   check_init_setup();
@@ -488,13 +488,11 @@ bool Solid::IMPLICIT::GenAlpha::predict_const_vel_consist_acc(Core::LinAlg::Vect
   accnp.update(1.0, disnp, -1.0, *disn, 0.0);
   accnp.update(-1.0 / (beta_ * dt), *veln, (2.0 * beta_ - 1.0) / (2.0 * beta_), *accn,
       1. / (beta_ * dt * dt));
-
-  return true;
 }
 
 /*----------------------------------------------------------------------------*
  *----------------------------------------------------------------------------*/
-bool Solid::IMPLICIT::GenAlpha::predict_const_acc(Core::LinAlg::Vector<double>& disnp,
+void Solid::IMPLICIT::GenAlpha::predict_const_acc(Core::LinAlg::Vector<double>& disnp,
     Core::LinAlg::Vector<double>& velnp, Core::LinAlg::Vector<double>& accnp) const
 {
   check_init_setup();
@@ -519,8 +517,6 @@ bool Solid::IMPLICIT::GenAlpha::predict_const_acc(Core::LinAlg::Vector<double>& 
 
   // constant accelerations (equal to consistent accelerations)
   accnp.update(1.0, *accn, 0.0);
-
-  return true;
 }
 
 /*----------------------------------------------------------------------------*

@@ -93,12 +93,12 @@ namespace Solid
 
       /*! predict displacements based on constant velocities and consistent accelerations (derived)
        */
-      bool predict_const_vel_consist_acc(Core::LinAlg::Vector<double>& disnp,
+      void predict_const_vel_consist_acc(Core::LinAlg::Vector<double>& disnp,
           Core::LinAlg::Vector<double>& velnp, Core::LinAlg::Vector<double>& accnp) const override;
 
       /*! predict displacements based on constant accelerations and consistent velocities (derived)
        */
-      bool predict_const_acc(Core::LinAlg::Vector<double>& disnp,
+      void predict_const_acc(Core::LinAlg::Vector<double>& disnp,
           Core::LinAlg::Vector<double>& velnp, Core::LinAlg::Vector<double>& accnp) const override;
       //! @}
 

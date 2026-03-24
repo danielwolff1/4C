@@ -268,7 +268,7 @@ void Solid::IMPLICIT::GenAlphaLieGroup::predict_const_dis_consist_vel_acc(
 
 /*----------------------------------------------------------------------------*
  *----------------------------------------------------------------------------*/
-bool Solid::IMPLICIT::GenAlphaLieGroup::predict_const_vel_consist_acc(
+void Solid::IMPLICIT::GenAlphaLieGroup::predict_const_vel_consist_acc(
     Core::LinAlg::Vector<double>& disnp, Core::LinAlg::Vector<double>& velnp,
     Core::LinAlg::Vector<double>& accnp) const
 {
@@ -281,7 +281,7 @@ bool Solid::IMPLICIT::GenAlphaLieGroup::predict_const_vel_consist_acc(
 
 /*----------------------------------------------------------------------------*
  *----------------------------------------------------------------------------*/
-bool Solid::IMPLICIT::GenAlphaLieGroup::predict_const_acc(Core::LinAlg::Vector<double>& disnp,
+void Solid::IMPLICIT::GenAlphaLieGroup::predict_const_acc(Core::LinAlg::Vector<double>& disnp,
     Core::LinAlg::Vector<double>& velnp, Core::LinAlg::Vector<double>& accnp) const
 {
   check_init_setup();
@@ -289,8 +289,6 @@ bool Solid::IMPLICIT::GenAlphaLieGroup::predict_const_acc(Core::LinAlg::Vector<d
   FOUR_C_THROW(
       "Predictor ConstAcc is not supported in Lie group GenAlpha so far! Use "
       "ConstDisConsistVelAcc!");
-
-  return true;
 }
 
 /*----------------------------------------------------------------------------*

@@ -47,7 +47,6 @@ void Solid::Predict::ConstDisVelAccPress::compute(::NOX::Abstract::Group& grp)
   std::shared_ptr<Core::LinAlg::Vector<double>>& velnp_ptr = global_state().get_vel_np();
   std::shared_ptr<Core::LinAlg::Vector<double>>& accnp_ptr = global_state().get_acc_np();
 
-  bool ok = true;
   switch (get_type())
   {
     case Inpar::Solid::pred_constdis:
@@ -58,12 +57,12 @@ void Solid::Predict::ConstDisVelAccPress::compute(::NOX::Abstract::Group& grp)
     }
     case Inpar::Solid::pred_constvel:
     {
-      ok = impl_int().predict_const_vel_consist_acc(*disnp_ptr, *velnp_ptr, *accnp_ptr);
+      impl_int().predict_const_vel_consist_acc(*disnp_ptr, *velnp_ptr, *accnp_ptr);
       break;
     }
     case Inpar::Solid::pred_constacc:
     {
-      ok = impl_int().predict_const_acc(*disnp_ptr, *velnp_ptr, *accnp_ptr);
+      impl_int().predict_const_acc(*disnp_ptr, *velnp_ptr, *accnp_ptr);
       break;
     }
     case Inpar::Solid::pred_constdisvelacc:
@@ -81,10 +80,6 @@ void Solid::Predict::ConstDisVelAccPress::compute(::NOX::Abstract::Group& grp)
     }
   }
   impl_int().model_eval().predict(get_type());
-
-  // If the const predictors failed e.g. due to too little history information,
-  // we use the tangdis predictor as fallback predictor.
-  if (not ok) tangdis_ptr_->compute(grp);
 }
 
 FOUR_C_NAMESPACE_CLOSE

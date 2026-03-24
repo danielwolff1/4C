@@ -387,7 +387,7 @@ void Solid::IMPLICIT::OneStepTheta::predict_const_dis_consist_vel_acc(
 
 /*----------------------------------------------------------------------------*
  *----------------------------------------------------------------------------*/
-bool Solid::IMPLICIT::OneStepTheta::predict_const_vel_consist_acc(
+void Solid::IMPLICIT::OneStepTheta::predict_const_vel_consist_acc(
     Core::LinAlg::Vector<double>& disnp, Core::LinAlg::Vector<double>& velnp,
     Core::LinAlg::Vector<double>& accnp) const
 {
@@ -410,13 +410,11 @@ bool Solid::IMPLICIT::OneStepTheta::predict_const_vel_consist_acc(
   accnp.update(1.0, disnp, -1.0, *disn, 0.0);
   accnp.update(-1.0 / (theta_ * theta_ * dt), *veln, -(1.0 - theta_) / theta_, *accn,
       1.0 / (theta_ * theta_ * dt * dt));
-
-  return true;
 }
 
 /*----------------------------------------------------------------------------*
  *----------------------------------------------------------------------------*/
-bool Solid::IMPLICIT::OneStepTheta::predict_const_acc(Core::LinAlg::Vector<double>& disnp,
+void Solid::IMPLICIT::OneStepTheta::predict_const_acc(Core::LinAlg::Vector<double>& disnp,
     Core::LinAlg::Vector<double>& velnp, Core::LinAlg::Vector<double>& accnp) const
 {
   check_init_setup();
@@ -439,8 +437,6 @@ bool Solid::IMPLICIT::OneStepTheta::predict_const_acc(Core::LinAlg::Vector<doubl
   accnp.update(1.0, disnp, -1.0, *disn, 0.0);
   accnp.update(-1.0 / (theta_ * theta_ * dt), *veln, -(1.0 - theta_) / theta_, *accn,
       1.0 / (theta_ * theta_ * dt * dt));
-
-  return true;
 }
 
 /*----------------------------------------------------------------------------*

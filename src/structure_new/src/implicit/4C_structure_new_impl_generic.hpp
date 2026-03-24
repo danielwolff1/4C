@@ -112,7 +112,7 @@ namespace Solid
        * \param[in/out] velnp Velocity vector
        * \param[in/out] accnp Acceleration vector
        */
-      virtual bool predict_const_vel_consist_acc(Core::LinAlg::Vector<double>& disnp,
+      virtual void predict_const_vel_consist_acc(Core::LinAlg::Vector<double>& disnp,
           Core::LinAlg::Vector<double>& velnp, Core::LinAlg::Vector<double>& accnp) const = 0;
 
       /*! \brief predict displacements based on the assumption of constant accelerations.
@@ -127,7 +127,7 @@ namespace Solid
        * \param[in/out] velnp Velocity vector
        * \param[in/out] accnp Acceleration vector
        */
-      virtual bool predict_const_acc(Core::LinAlg::Vector<double>& disnp,
+      virtual void predict_const_acc(Core::LinAlg::Vector<double>& disnp,
           Core::LinAlg::Vector<double>& velnp, Core::LinAlg::Vector<double>& accnp) const = 0;
       //!@}
 

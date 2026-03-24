@@ -29,9 +29,6 @@ namespace Solid
 
       //! do the class specific predictor step
       void compute(::NOX::Abstract::Group& grp) override;
-
-     private:
-      std::shared_ptr<Solid::Predict::Generic> tangdis_ptr_;
     };  // class ConstDisVelAccPress
   }  // namespace Predict
 }  // namespace Solid
